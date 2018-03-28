@@ -1,0 +1,63 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.8.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+eclipse {
+    project {
+        name = 'Monitoring'
+    }
+}
+group = 'com.linebot.springboot'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	
+	maven {
+        url "http://central.maven.org/maven2/"
+    }
+}
+
+jar {
+	manifest {
+		attributes  'Title': 'Line bot test', 'Main-Class': 'com.status.springboot.StatusSpringBootApplication'
+	}
+	dependsOn configurations.runtime
+	from {
+		configurations.compile.collect {it.isDirectory()? it: zipTree(it)}
+	}
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-tomcat')
+
+	// lombok
+	compileOnly ('org.projectlombok:lombok:1.16.18')
+
+	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile('org.jsoup:jsoup:1.8.1')
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
+	
+	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.3.4'
+	
+
+	runtime('org.hsqldb:hsqldb')
+	runtime('mysql:mysql-connector-java')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+
+}
